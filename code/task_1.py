@@ -27,6 +27,10 @@ for category in os.listdir(dataset_dir):
             image_path = os.path.join(images_dir, img_name)
             text_path = os.path.join(texts_dir, text_name)
 
+            # Normalize the paths to use forward slashes
+            image_path = image_path.replace('\\', '/')
+            text_path = text_path.replace('\\', '/')
+
             with open(text_path, 'r', encoding='utf-8') as file:
                 text_content = file.read()
 

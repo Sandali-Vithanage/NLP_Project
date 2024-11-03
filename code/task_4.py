@@ -1,5 +1,6 @@
 import pandas as pd
 import nltk
+import os
 import string
 from nltk.corpus import stopwords
 from gensim import corpora
@@ -30,15 +31,18 @@ dictionary = corpora.Dictionary(processed_data)
 corpus = [dictionary.doc2bow(text) for text in processed_data]
 
 # Perform LDA
-num_topics = 10  # You can optimize this later
+num_topics = 10
 lda_model = LdaModel(corpus, num_topics=num_topics, id2word=dictionary, passes=10)
 
 # Prepare and save the visualization
+output_dir = os.path.abspath('../output')
+output_file = 'Task_4_lda_visualization.html'
 vis = gensimvis.prepare(lda_model, corpus, dictionary)
-pyLDAvis.save_html(vis, 'lda_visualization.html')
+output_path = os.path.join(output_dir, output_file)
+pyLDAvis.save_html(vis, output_path)
 
 # open the visualization in a web browser
-webbrowser.open('lda_visualization.html')
+webbrowser.open(f'file://{output_path}')
 
 # Print the topics
 for idx, topic in lda_model.print_topics(-1):
