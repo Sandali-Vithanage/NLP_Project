@@ -1,4 +1,4 @@
-# Group project 32 for NLP course, November of 2024
+# University of Oulu | Group project 32 for NLP course, November of 2024
 
 ## Damage Identification in Social Media Posts using Multimodal Techniques
 
