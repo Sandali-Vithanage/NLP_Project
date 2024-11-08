@@ -1,9 +1,10 @@
 import os
 import pandas as pd
 
+# Define the path to the dataset
 dataset_dir = '../dataset/unprocessed/multimodal-deep-learning-disaster-response-mouzannar/multimodal'
 
-# Prepare lists to store data
+# Prepare a dictionary to store the data
 data = {
     'category': [],
     'image_path': [],
@@ -14,7 +15,7 @@ data = {
 for category in os.listdir(dataset_dir):
     category_path = os.path.join(dataset_dir, category)
     if os.path.isdir(category_path):
-        # Process images
+        # Process images and texts
         images_dir = os.path.join(category_path, 'images')
         texts_dir = os.path.join(category_path, 'text')
 
@@ -38,11 +39,24 @@ for category in os.listdir(dataset_dir):
             data['image_path'].append(image_path)
             data['text'].append(text_content)
 
-
+# Create a DataFrame from the collected data
 df = pd.DataFrame(data)
 
-# Save to CSV
-output_path = '../dataset/processed/multimodal_dataset.csv'
+# ------------ Data Cleaning Steps ------------------
 
+# Remove duplicates
+df.drop_duplicates(inplace=True)
+
+# Handle missing values
+# Drop rows with missing text or image paths
+df.dropna(subset=['text', 'image_path'], inplace=True)
+
+# Convert to lowercase and strip whitespace
+df['text'] = df['text'].str.lower().str.strip()
+
+df.reset_index(drop=True, inplace=True)
+
+# Save the cleaned dataset to CSV
+output_path = '../dataset/processed/multimodal_dataset.csv'
 df.to_csv(output_path, index=False, encoding='utf-8')
-print(f"Successfully saved to CSV. Find the file at: {os.path.abspath(output_path)}")
+print(f"Data cleaning completed and saved to CSV. Find the file at: {os.path.abspath(output_path)}")
